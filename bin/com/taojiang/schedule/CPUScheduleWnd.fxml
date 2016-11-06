@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taojiang.schedule.ScheduleController">
+   <children>
+      <TableView fx:id="table_pool" layoutY="328.0" prefHeight="200.0" prefWidth="227.0" />
+      <Label layoutX="85.0" layoutY="313.0" text="后备队列" />
+      <TableView fx:id="table_ready" layoutY="76.0" prefHeight="200.0" prefWidth="227.0" />
+      <Label layoutX="90.0" layoutY="60.0" text="就绪队列" />
+      <TableView fx:id="table_suspand" layoutX="773.0" layoutY="76.0" prefHeight="200.0" prefWidth="227.0" />
+      <Label layoutX="863.0" layoutY="60.0" text="挂起队列" />
+      <TableView fx:id="table_wait" layoutX="773.0" layoutY="328.0" prefHeight="200.0" prefWidth="227.0" />
+      <Label layoutX="872.0" layoutY="313.0" text="等待队列" />
+      <Label layoutX="571.0" layoutY="60.0" text="CPU" />
+      <ImageView fx:id="iv_cpu1" fitHeight="100.0" fitWidth="100.0" layoutX="533.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true" />
+      <ProgressBar fx:id="pb_cpu1_1" layoutX="255.0" layoutY="144.0" prefWidth="200.0" progress="0.0" />
+      <ImageView fx:id="iv_cpu2" fitHeight="100.0" fitWidth="100.0" layoutX="533.0" layoutY="378.0" pickOnBounds="true" preserveRatio="true" />
+      <ProgressBar fx:id="pb_cpu2_1" layoutX="255.0" layoutY="397.0" prefWidth="200.0" progress="0.0" />
+      <Label layoutX="340.0" layoutY="60.0" text="调度进度" />
+      <ProgressBar fx:id="pb_cpu1_2" layoutX="255.0" layoutY="190.0" prefWidth="200.0" progress="0.0" />
+      <ProgressBar fx:id="pb_cpu2_2" layoutX="255.0" layoutY="442.0" prefWidth="200.0" progress="0.0" />
+      <Label fx:id="lb_cpu1_1" layoutX="458.0" layoutY="146.0" text="0" />
+      <Label layoutX="493.0" layoutY="146.0" text="秒" />
+      <Label layoutX="493.0" layoutY="192.0" text="秒" />
+      <Label fx:id="lb_cpu1_2" layoutX="458.0" layoutY="192.0" text="0" />
+      <Label layoutX="493.0" layoutY="399.0" text="秒" />
+      <Label fx:id="lb_cpu2_1" layoutX="458.0" layoutY="399.0" text="0" />
+      <Label layoutX="493.0" layoutY="444.0" text="秒" />
+      <Label fx:id="lb_cpu2_2" layoutX="458.0" layoutY="444.0" text="0" />
+      <Label layoutX="463.0" layoutY="60.0" text="待执行时间" />
+      <HBox alignment="CENTER_LEFT" layoutY="528.0" prefHeight="72.0" prefWidth="1000.0" spacing="20.0">
+         <children>
+            <TextField fx:id="tf_proName" prefHeight="25.0" prefWidth="125.0" promptText="进程名，如P_1000" />
+            <TextField fx:id="tf_proRuntime" prefHeight="25.0" prefWidth="125.0" promptText="运行时间，单位秒" />
+            <TextField fx:id="tf_proPriority" prefHeight="25.0" prefWidth="125.0" promptText="进程优先权" />
+            <TextField fx:id="tf_proMemNeeded" prefHeight="25.0" prefWidth="125.0" promptText="进程所需主存大小" />
+            <Button fx:id="bt_addProcess" mnemonicParsing="false" onMouseClicked="#addProButtonAction" prefHeight="25.0" prefWidth="75.0" text="添加进程" />
+            <ComboBox fx:id="cb_selectMethod" prefHeight="25.0" prefWidth="150.0" promptText="选择调度方法" />
+            <Button fx:id="bt_startSchedule" mnemonicParsing="false" onMouseClicked="#startScheduleButtonClicked" text="开始调度" />
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </HBox>
+      <Label layoutX="658.0" layoutY="60.0" text="主存信息" />
+   </children>
+</Pane>
