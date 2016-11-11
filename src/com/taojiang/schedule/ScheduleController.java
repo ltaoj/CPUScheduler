@@ -23,9 +23,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class ScheduleController extends Thread implements Initializable{
+	public static final String image_url_1 = "image/cpu_spare.png";
+	public static final String image_url_2 = "image/cpu_busy.png";
 	// 定义是否可以添加进程的信号量
 	static boolean signal = true;
 	// 定义一些调度方法的字符串常量
@@ -64,8 +67,8 @@ public class ScheduleController extends Thread implements Initializable{
 	@FXML private TableView<TProcess> table_ready;
 	@FXML private TableView<TProcess> table_suspand;
 	@FXML private TableView<TProcess> table_wait;
-	@FXML private ImageView iv_cpu1;
-	@FXML private ImageView iv_cpu2;
+	@FXML public ImageView iv_cpu1;
+	@FXML public ImageView iv_cpu2;
 	@FXML public ProgressBar pb_cpu1_1;
 	@FXML public ProgressBar pb_cpu1_2;
 	@FXML public ProgressBar pb_cpu2_1;
@@ -126,6 +129,8 @@ public class ScheduleController extends Thread implements Initializable{
 			}
 		});
 
+		iv_cpu1.setImage(new Image(image_url_1));
+		iv_cpu2.setImage(new Image(image_url_1));
 		this.start();
 	}
 	// 为TableView添加TableColumn

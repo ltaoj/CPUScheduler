@@ -7,6 +7,8 @@ import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 public class CPU {
 	public final int CPU_STATE_SPARE = 0;  // cpu空闲
@@ -50,11 +52,10 @@ public class CPU {
 			}
 		}
 		Thread thread = new Thread(new Runnable() {
-			final int dealTime = process.getProRuntime();
 			final int whichPB = which;
 			@Override
 			public void run() {
-				animation(dealTime,whichPB);
+				animation(process,whichPB);
 			}
 		});
 
@@ -68,34 +69,59 @@ public class CPU {
 			state = CPU_STATE_WORK;
 		else
 			state = CPU_STATE_SPARE;
+		updateUI(state);
 		System.out.println(getCpuName() + "状态更新成功" + state);
 	}
 
+	private void updateUI(int state){
+		ImageView imageview;
+		if(getCpuName().equals("cpu1"))
+			imageview = scheduleController.iv_cpu1;
+		else
+			imageview = scheduleController.iv_cpu2;
+
+		switch (state) {
+		case CPU_STATE_SPARE:
+			imageview.setImage(new Image(ScheduleController.image_url_1));
+			break;
+		case CPU_STATE_WORK:
+			imageview.setImage(new Image(ScheduleController.image_url_2));
+			break;
+		default:
+			break;
+		}
+	}
 	public String getCpuName() {
 		// TODO Auto-generated method stub
 		return cpuName;
 	}
 	//产生进度条动画的函数
-	protected void animation(int totalTime,int which) {
+	protected void animation(Process process,int which) {
 		switch (which) {
 		case 0:
-			animation(scheduleController.pb_cpu1_1, scheduleController.lb_cpu1_1, totalTime, 0);
+			animation(scheduleController.pb_cpu1_1, scheduleController.lb_cpu1_1, process, 0);
 			break;
 		case 1:
-			animation(scheduleController.pb_cpu1_2, scheduleController.lb_cpu1_2, totalTime, 1);
+			animation(scheduleController.pb_cpu1_2, scheduleController.lb_cpu1_2, process, 1);
 			break;
 		case 2:
-			animation(scheduleController.pb_cpu2_1, scheduleController.lb_cpu2_1, totalTime, 2);
+			animation(scheduleController.pb_cpu2_1, scheduleController.lb_cpu2_1, process, 2);
 			break;
 		case 3:
-			animation(scheduleController.pb_cpu2_2, scheduleController.lb_cpu2_2, totalTime, 3);
+			animation(scheduleController.pb_cpu2_2, scheduleController.lb_cpu2_2, process, 3);
 			break;
 		default:
 			break;
 		}
 	}
 
-	public synchronized void animation(ProgressBar pb,Label lb,int totalTime,int which){
+	public void animation(ProgressBar pb,Label lb,Process process,int which){
+		final int totalTime = process.getProRuntime();
+		// 进程开始执行前
+		// 分配主存空间操作可在主窗口控制器里边实现
+		// 界面绘图
+
+		// 进程开始执行
 		 Animation animation = new Transition() {
 		     {
 		         setCycleDuration(Duration.millis(totalTime*1000));
@@ -115,6 +141,8 @@ public class CPU {
 					else
 						process2 = null;
 					updateState();
+					// 进程完成，回收主存，相邻区间合并
+					// 界面UI刷新
 		         }
 		     }
 
