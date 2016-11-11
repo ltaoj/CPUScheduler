@@ -132,17 +132,19 @@ public class CPU {
 //		         System.out.println(frac + " " + n);
 		         lb.setText(""+Math.round(totalTime * (float)(1- frac)));
 //		         System.out.println(pb==null?"pb si null":"pb is not null" + which);
-		        pb.setProgress(frac);
+		         pb.setProgress(frac);
 		         if(frac == 1.0){
 		        	 lb.setText("0");
 		        	 pb.setProgress(0F);
+		        	// 进程完成，回收主存，相邻区间合并
+					// 界面UI刷新
+//		        	 System.out.println(process.getProName() == null);
+					scheduleController.table.recycleMemory(process.getProName());
 					if(which % 2 == 0)
 						process1 = null;
 					else
 						process2 = null;
 					updateState();
-					// 进程完成，回收主存，相邻区间合并
-					// 界面UI刷新
 		         }
 		     }
 

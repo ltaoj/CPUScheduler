@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import com.taojiang.cpu.CPUS;
+import com.taojiang.memory.Memory;
+import com.taojiang.memory.Zone;
 import com.taojiang.queue.Process;
 import com.taojiang.queue.Queue;
 import com.taojiang.tableclass.TProcess;
@@ -15,6 +17,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -25,6 +29,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class ScheduleController extends Thread implements Initializable{
 	public static final String image_url_1 = "image/cpu_spare.png";
@@ -55,6 +60,8 @@ public class ScheduleController extends Thread implements Initializable{
 	private static Queue waitQueue;
 	// 声明两个CPU，每个CPU为两道
 	static CPUS cpus;
+	// 创建分区表
+	public Memory table;
 	// 映射FXML里边的控件
 	@FXML private TextField tf_proName;
 	@FXML private TextField tf_proRuntime;
@@ -77,6 +84,8 @@ public class ScheduleController extends Thread implements Initializable{
 	@FXML public Label lb_cpu1_2;
 	@FXML public Label lb_cpu2_1;
 	@FXML public Label lb_cpu2_2;
+	@FXML public Canvas canvas;
+	public GraphicsContext gc;
 /**************************************以下函数区****************************************/
 	// ScheduleController初始化的函数，自动调用
 	@Override
@@ -131,6 +140,11 @@ public class ScheduleController extends Thread implements Initializable{
 
 		iv_cpu1.setImage(new Image(image_url_1));
 		iv_cpu2.setImage(new Image(image_url_1));
+		// 实例化gc
+		gc = canvas.getGraphicsContext2D();
+		// 初始化分区表
+		table = new Memory(this);
+		table.initMemory();
 		this.start();
 	}
 	// 为TableView添加TableColumn
@@ -230,6 +244,9 @@ public class ScheduleController extends Thread implements Initializable{
 				}
 				// 将排序后的队首进程从就绪队列删除
 				Process process = removeProcess(readyQueue, readyObList, 0);
+				// canvas分配内存
+				process.setProStoreStart(table.allocateMemory(process.getProStoreSize(), process.getProName()));
+				table.insertZone(process.getProStoreSize(), Zone.STATE_USE, process.getProName());
 				// 将该进程交由CPU处理
 				cpus.work(process);
 			}
