@@ -27,8 +27,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 
 public class ScheduleController extends Thread implements Initializable{
@@ -36,6 +38,8 @@ public class ScheduleController extends Thread implements Initializable{
 	public static final String image_url_2 = "image/cpu_busy.png";
 	// 定义是否可以添加进程的信号量
 	static boolean signal = true;
+	// 表示当前已有的进程数目
+	private int proNums = 1;
 	// 定义一些调度方法的字符串常量
 	private static final String FCFS = "FCFS";
 	private static final String PRIORITY = "Priority";
@@ -179,10 +183,9 @@ public class ScheduleController extends Thread implements Initializable{
 //		for (int i = 0; i < readyObList.size(); i++) {
 //			System.out.println(readyObList.get(i).getProName());
 //		}
-		tf_proName.clear();
-		tf_proRuntime.clear();
-		tf_proPriority.clear();
-		tf_proMemNeeded.clear();
+		proNums++;
+		// 随机生成下一次进程信息
+		startScheduleButtonClicked();
 		signal = true;
 	}
 	// 向队列添加进程,并显示在界面上
@@ -205,6 +208,10 @@ public class ScheduleController extends Thread implements Initializable{
 	// start schedule button response event
 	public void startScheduleButtonClicked(){
 //		this.start();
+		tf_proName.setText("p"+proNums);
+		tf_proRuntime.setText("" + randomNum(5, 20));
+		tf_proPriority.setText("" + randomNum(1, 20));
+		tf_proMemNeeded.setText("" + randomNum(20, 80));
 	}
 
 	// 调度算法
@@ -245,6 +252,7 @@ public class ScheduleController extends Thread implements Initializable{
 				// 将排序后的队首进程从就绪队列删除
 				Process process = removeProcess(readyQueue, readyObList, 0);
 				// canvas分配内存
+				while(table.allocateMemory(process.getProStoreSize(), process.getProName()) == -1){}
 				process.setProStoreStart(table.allocateMemory(process.getProStoreSize(), process.getProName()));
 				table.insertZone(process.getProStoreSize(), Zone.STATE_USE, process.getProName());
 				// 将该进程交由CPU处理
@@ -252,6 +260,10 @@ public class ScheduleController extends Thread implements Initializable{
 			}
 		}
 
+	}
+
+	public int randomNum(int start,int end){
+		return (int)(start + Math.random()*(end - start));
 	}
 
 	Comparator<TProcess> compare = new Comparator<TProcess>() {

@@ -52,6 +52,7 @@ public class Memory implements Memorys{
 	public void insertZone(int size, boolean state, String proName) {
 		// TODO Auto-generated method stub
 		int start = allocateMemory(size,proName);
+
 		for(int i = 1;i < zones.length;i++){
 			if(zones[i].getStart() == start){
 				int j = zones.length - 1;
@@ -98,15 +99,19 @@ public class Memory implements Memorys{
 					gc.setFill(Color.CADETBLUE);
 					gc.fillRect(layoutX, layoutY + zones[i].getStart(), cWidth, zones[i].getSize());
 					// 合并相邻内存,向前合并
-					merge(i);// 合并左侧
-					if(zones[i].isState() == Zone.STATE_SPARE)merge(i);// 合并右侧
+					boolean isMerged = merge(i);// 合并左侧
+					if(isMerged){// 合并右侧
+						if(zones[i].isState() == Zone.STATE_SPARE)merge(i);
+					}else{
+						if(zones[i + 1].isState() == Zone.STATE_SPARE) merge(i + 1);
+					}
 					break;
 				}
 			}
 		}
 	}
 	@Override
-	public void merge(int p) {
+	public boolean merge(int p) {
 		if(zones[p-1].isState() == Zone.STATE_SPARE){
 			// 合并内存
 			zones[p-1].setSize(zones[p-1].getSize() + zones[p].getSize());
@@ -122,7 +127,9 @@ public class Memory implements Memorys{
 			// canvas
 			gc.setFill(Color.CHARTREUSE);
 			gc.fillRect(layoutX, layoutY + zones[p-1].getStart(), cWidth, zones[p-1].getSize());
+			return true;
 		}
+		return false;
 	}
 	private int getAddress(String proName){
 		int start = -1;
