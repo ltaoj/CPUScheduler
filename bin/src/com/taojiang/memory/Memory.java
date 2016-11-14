@@ -4,7 +4,6 @@ import com.taojiang.schedule.ScheduleController;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
 
 // 采用数组实现内存的连接
 public class Memory implements Memorys{
@@ -28,20 +27,14 @@ public class Memory implements Memorys{
 	public void initMemory(){
 		zones = new Zone[ZONE_SIZE + 1];
 		zones[0] = new Zone(0, 30, Zone.STATE_USE, "system");
-		gc.clearRect(layoutX, layoutY, cWidth, zones[0].getSize());
 		gc.setFill(Color.RED);
 		gc.fillRect(layoutX, layoutY, cWidth, 30);
-		gc.setFill(Color.BLACK);
-		gc.fillText(zones[0].getProName(), layoutX, layoutY+zones[0].getStart()+zones[0].getSize()/2);
 		System.out.println("1111111111");
 		zones[1] = new Zone();
 		zones[1].setStart(30);
 		zones[1].setSize(maxSize-30);
-		gc.clearRect(layoutX, layoutY + zones[1].getStart(), cWidth, zones[1].getSize());
 		gc.setFill(Color.CADETBLUE);
 		gc.fillRect(layoutX, layoutY + 30, cWidth, zones[1].getSize());
-		gc.setFill(Color.BLACK);
-		gc.fillText(zones[1].getProName(), layoutX, layoutY+zones[1].getStart()+zones[1].getSize()/2);
 	}
 
 	@Override
@@ -85,11 +78,8 @@ public class Memory implements Memorys{
 				zones[i].setState(state);
 				zones[i].setProName(proName);
 				// canvas
-				gc.clearRect(layoutX, layoutY + zones[i].getStart(), cWidth, zones[i].getSize());
 				gc.setFill(Color.AQUA);
 				gc.fillRect(layoutX, layoutY + zones[i].getStart(), cWidth, zones[i].getSize());
-				gc.setFill(Color.BLACK);
-				gc.fillText(zones[i].getProName(), layoutX, layoutY+zones[i].getStart()+zones[i].getSize()/2);
 				break;
 			}
 		}
@@ -106,7 +96,6 @@ public class Memory implements Memorys{
 					zones[i].setState(Zone.STATE_SPARE);
 					zones[i].setProName(null);
 					// canvas
-					gc.clearRect(layoutX, layoutY + zones[i].getStart(), cWidth, zones[i].getSize());
 					gc.setFill(Color.CADETBLUE);
 					gc.fillRect(layoutX, layoutY + zones[i].getStart(), cWidth, zones[i].getSize());
 					// 合并相邻内存,向前合并
@@ -136,11 +125,8 @@ public class Memory implements Memorys{
 			}
 			zones[i] = null;
 			// canvas
-			gc.clearRect(layoutX, layoutY + zones[p-1].getStart(), cWidth, zones[p-1].getSize());
 			gc.setFill(Color.CHARTREUSE);
 			gc.fillRect(layoutX, layoutY + zones[p-1].getStart(), cWidth, zones[p-1].getSize());
-			gc.setFill(Color.BLACK);
-			gc.fillText(zones[p-1].getProName(), layoutX, layoutY+zones[p-1].getStart()+zones[p-1].getSize()/2);
 			return true;
 		}
 		return false;
